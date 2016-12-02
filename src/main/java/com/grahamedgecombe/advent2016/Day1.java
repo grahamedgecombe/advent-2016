@@ -8,7 +8,7 @@ import java.util.Set;
 
 public final class Day1 {
 	public static void main(String[] args) throws IOException {
-		Result result = Day1.run(AdventUtils.readString("day1.txt"));
+		Result result = run(AdventUtils.readString("day1.txt"));
 		System.out.println(result.getHqDistance());
 		System.out.println(result.getVisitedTwiceDistance());
 	}

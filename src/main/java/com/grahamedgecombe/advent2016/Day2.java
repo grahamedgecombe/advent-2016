@@ -26,8 +26,8 @@ public final class Day2 {
 
 	public static void main(String[] args) throws IOException {
 		List<String> lines = AdventUtils.readLines("day2.txt");
-		System.out.println(Day2.getBathroomCode(lines, PART_1_KEYPAD, PART_1_START_X, PART_1_START_Y));
-		System.out.println(Day2.getBathroomCode(lines, PART_2_KEYPAD, PART_2_START_X, PART_2_START_Y));
+		System.out.println(getBathroomCode(lines, PART_1_KEYPAD, PART_1_START_X, PART_1_START_Y));
+		System.out.println(getBathroomCode(lines, PART_2_KEYPAD, PART_2_START_X, PART_2_START_Y));
 	}
 
 	public static String getBathroomCode(List<String> lines, char[][] keypad, int x, int y) {
