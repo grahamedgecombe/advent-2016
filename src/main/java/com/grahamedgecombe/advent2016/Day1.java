@@ -34,7 +34,7 @@ public final class Day1 {
 	private static final class Block {
 		private final int x, y;
 
-		public Block(int x, int y) {
+		private Block(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
