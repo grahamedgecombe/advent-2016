@@ -2,5 +2,6 @@
 *~
 *.iml
 /build
+/classes
 !.git*
 !.mailmap
