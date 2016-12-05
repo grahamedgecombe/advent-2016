@@ -47,20 +47,22 @@ public final class Day5 {
 
 		for (int i = 0, j = 0; i < password.length; j++) {
 			String hex = md5(doorId + j);
-			if (hex.startsWith("00000")) {
-				char pos = hex.charAt(5);
-				if (pos < '0' || pos > '7') {
-					continue;
-				}
-
-				pos -= '0';
-				if (password[pos] != 0) {
-					continue;
-				}
-
-				password[pos] = hex.charAt(6);
-				i++;
+			if (!hex.startsWith("00000")) {
+				continue;
 			}
+
+			char pos = hex.charAt(5);
+			if (pos < '0' || pos > '7') {
+				continue;
+			}
+
+			pos -= '0';
+			if (password[pos] != 0) {
+				continue;
+			}
+
+			password[pos] = hex.charAt(6);
+			i++;
 		}
 
 		return new String(password);
