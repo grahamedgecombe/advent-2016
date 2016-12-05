@@ -25,8 +25,6 @@ public final class Day5 {
 	}
 
 	private static String md5(String input) {
-		MD5.reset();
-
 		byte[] digest = MD5.digest(input.getBytes(StandardCharsets.UTF_8));
 		return BaseEncoding.base16().lowerCase().encode(digest);
 	}
