@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.function.BiPredicate;
 
 public final class Day6 {
+	public static final BiPredicate<Integer, Integer> GREATER_THAN = (a, b) -> a > b;
+	public static final BiPredicate<Integer, Integer> LESS_THAN = (a, b) -> a < b;
+
 	public static void main(String[] args) throws IOException {
 		List<String> messages = AdventUtils.readLines("day6.txt");
-		System.out.println(getMessage(messages, (a, b) -> a > b));
-		System.out.println(getMessage(messages, (a, b) -> a < b));
+		System.out.println(getMessage(messages, GREATER_THAN));
+		System.out.println(getMessage(messages, LESS_THAN));
 	}
 
 	public static String getMessage(List<String> messages, BiPredicate<Integer, Integer> greaterThan) {

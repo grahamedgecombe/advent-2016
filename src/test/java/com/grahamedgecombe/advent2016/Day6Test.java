@@ -29,11 +29,11 @@ public final class Day6Test {
 
 	@Test
 	public void testPart1() {
-		assertEquals("easter", Day6.getMessage(messages, (a, b) -> a > b));
+		assertEquals("easter", Day6.getMessage(messages, Day6.GREATER_THAN));
 	}
 
 	@Test
 	public void testPart2() {
-		assertEquals("advent", Day6.getMessage(messages, (a, b) -> a < b));
+		assertEquals("advent", Day6.getMessage(messages, Day6.LESS_THAN));
 	}
 }
