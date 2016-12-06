@@ -1,14 +1,12 @@
 package com.grahamedgecombe.advent2016;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public final class Day6Test {
-	private static final List<String> messages = Arrays.asList(
+	private static final ImmutableList<String> MESSAGES = ImmutableList.of(
 		"eedadn",
 		"drvtee",
 		"eandsr",
@@ -29,11 +27,11 @@ public final class Day6Test {
 
 	@Test
 	public void testPart1() {
-		assertEquals("easter", Day6.getMessage(messages, Day6.GREATER_THAN));
+		assertEquals("easter", Day6.getMessage(MESSAGES, Day6.GREATER_THAN));
 	}
 
 	@Test
 	public void testPart2() {
-		assertEquals("advent", Day6.getMessage(messages, Day6.LESS_THAN));
+		assertEquals("advent", Day6.getMessage(MESSAGES, Day6.LESS_THAN));
 	}
 }
