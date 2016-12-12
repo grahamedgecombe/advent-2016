@@ -318,4 +318,8 @@ public final class Day11 {
 			return Objects.hash(level, pairs);
 		}
 	}
+
+	private Day11() {
+		/* empty */
+	}
 }
