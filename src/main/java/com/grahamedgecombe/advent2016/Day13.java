@@ -1,19 +1,25 @@
 package com.grahamedgecombe.advent2016;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
 
 public final class Day13 {
 	public static void main(String[] args) throws IOException {
 		int favouriteNumber = Integer.parseInt(AdventUtils.readString("day13.txt"));
 		Day13 day13 = new Day13(favouriteNumber, 31, 39);
 		System.out.println(day13.getSteps());
+		System.out.println(day13.getVisited(50));
 	}
 
 	private final int favouriteNumber, destX, destY;
+	private final Node root = new Node(1, 1);
 
 	public Day13(int favouriteNumber, int destX, int destY) {
 		this.favouriteNumber = favouriteNumber;
@@ -22,7 +28,36 @@ public final class Day13 {
 	}
 
 	public Optional<Integer> getSteps() {
-		return AStar.search(new Node(1, 1)).map(List::size).map(i -> i - 1);
+		return AStar.search(root).map(List::size).map(i -> i - 1);
+	}
+
+	public int getVisited(int steps) {
+		Set<Node> visited = new HashSet<>();
+		visited.add(root);
+
+		Queue<Node> queue = new ArrayDeque<>();
+		queue.add(root);
+
+		for (int i = 0; i < steps; i++) {
+			List<Node> neighbours = new ArrayList<>();
+
+			Node node;
+			while ((node = queue.poll()) != null) {
+				for (Node neighbour : node.getNeighbours()) {
+					if (visited.contains(neighbour)) {
+						continue;
+					}
+
+					visited.add(neighbour);
+					neighbours.add(neighbour);
+				}
+			}
+
+			queue.addAll(neighbours);
+			neighbours.clear();
+		}
+
+		return visited.size();
 	}
 
 	private final class Node extends AStar.Node<Node> {
