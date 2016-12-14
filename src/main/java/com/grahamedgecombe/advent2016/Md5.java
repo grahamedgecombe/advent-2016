@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import com.google.common.io.BaseEncoding;
 
-public class Md5 {
+public final class Md5 {
 	private static final MessageDigest MD5;
 	private static final BaseEncoding LOWERCASE_HEX = BaseEncoding.base16().lowerCase();
 
