@@ -1,39 +1,19 @@
 package com.grahamedgecombe.advent2016;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-import com.google.common.io.BaseEncoding;
 
 public final class Day5 {
-	private static final MessageDigest MD5;
-
-	static {
-		try {
-			MD5 = MessageDigest.getInstance("MD5");
-		} catch (NoSuchAlgorithmException ex) {
-			throw new ExceptionInInitializerError(ex);
-		}
-	}
-
 	public static void main(String[] args) throws IOException {
 		String doorId = AdventUtils.readString("day5.txt");
 		System.out.println(getPasswordPart1(doorId));
 		System.out.println(getPasswordPart2(doorId));
 	}
 
-	private static String md5(String input) {
-		byte[] digest = MD5.digest(input.getBytes(StandardCharsets.UTF_8));
-		return BaseEncoding.base16().lowerCase().encode(digest);
-	}
-
 	public static String getPasswordPart1(String doorId) {
 		char[] password = new char[8];
 
 		for (int i = 0, j = 0; i < password.length; j++) {
-			String hex = md5(doorId + j);
+			String hex = Md5.hash(doorId + j);
 			if (hex.startsWith("00000")) {
 				password[i++] = hex.charAt(5);
 			}
@@ -46,7 +26,7 @@ public final class Day5 {
 		char[] password = new char[8];
 
 		for (int i = 0, j = 0; i < password.length; j++) {
-			String hex = md5(doorId + j);
+			String hex = Md5.hash(doorId + j);
 			if (!hex.startsWith("00000")) {
 				continue;
 			}
