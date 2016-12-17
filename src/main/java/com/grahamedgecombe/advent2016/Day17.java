@@ -58,10 +58,10 @@ public final class Day17 {
 		@Override
 		public Iterable<Node> getNeighbours() {
 			List<Node> neighbours = new ArrayList<>();
-			addNeighbour(neighbours, 'U', 0,0, -1);
-			addNeighbour(neighbours, 'D', 1,0, 1);
-			addNeighbour(neighbours, 'L', 2,-1, 0);
-			addNeighbour(neighbours, 'R', 3,1, 0);
+			addNeighbour(neighbours, 'U', 0, 0, -1);
+			addNeighbour(neighbours, 'D', 1, 0, 1);
+			addNeighbour(neighbours, 'L', 2, -1, 0);
+			addNeighbour(neighbours, 'R', 3, 1, 0);
 			return neighbours;
 		}
 
