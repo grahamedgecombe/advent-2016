@@ -47,6 +47,41 @@ public final class Bfs {
 		return Optional.empty();
 	}
 
+	public static <T extends Node<T>> List<List<T>> searchAll(T root) {
+		List<List<T>> paths = new ArrayList<>();
+
+		Queue<T> queue = new ArrayDeque<>();
+		Map<T, T> parents = new HashMap<>();
+
+		queue.add(root);
+
+		T current;
+		while ((current = queue.poll()) != null) {
+			if (current.isGoal()) {
+				List<T> path = new ArrayList<>();
+
+				do {
+					path.add(current);
+				} while ((current = parents.get(current)) != null);
+
+				Collections.reverse(path);
+				paths.add(path);
+				continue;
+			}
+
+			for (T neighbour : current.getNeighbours()) {
+				if (parents.containsKey(neighbour)) {
+					continue;
+				}
+
+				queue.add(neighbour);
+				parents.put(neighbour, current);
+			}
+		}
+
+		return paths;
+	}
+
 	private Bfs() {
 		/* empty */
 	}

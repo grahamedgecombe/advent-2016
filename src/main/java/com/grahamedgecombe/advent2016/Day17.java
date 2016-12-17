@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 public final class Day17 {
 	public static void main(String[] args) throws IOException {
 		Day17 day17 = new Day17(AdventUtils.readString("day17.txt"));
-		System.out.println(day17.getPath());
+		System.out.println(day17.getShortestPath());
+		System.out.println(day17.getLongestPathLength());
 	}
 
 	private final String passcode;
@@ -19,7 +21,7 @@ public final class Day17 {
 		this.passcode = passcode;
 	}
 
-	public Optional<String> getPath() {
+	public Optional<String> getShortestPath() {
 		Optional<List<Node>> path = Bfs.search(root);
 		if (!path.isPresent()) {
 			return Optional.empty();
@@ -32,6 +34,10 @@ public final class Day17 {
 
 		Node lastNode = nodes.get(nodes.size() - 1);
 		return Optional.of(lastNode.path);
+	}
+
+	public OptionalInt getLongestPathLength() {
+		return Bfs.searchAll(root).stream().mapToInt(List::size).map(i -> i - 1).max();
 	}
 
 	private final class Node extends Bfs.Node<Node> {
