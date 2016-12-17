@@ -86,7 +86,7 @@ public final class Day13 {
 					int x = this.x + dx;
 					int y = this.y + dy;
 
-					if (x < 0|| y < 0) {
+					if (x < 0 || y < 0) {
 						continue;
 					}
 
