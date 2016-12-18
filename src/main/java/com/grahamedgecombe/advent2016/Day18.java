@@ -31,17 +31,10 @@ public final class Day18 {
 
 		for (int i = 0; i < current.length(); i++) {
 			boolean left = isTrap(current, i - 1);
-			boolean center = isTrap(current, i);
 			boolean right = isTrap(current, i + 1);
 
 			char ch;
-			if (left && center && !right) {
-				ch = TRAP;
-			} else if (!left && center && right) {
-				ch = TRAP;
-			} else if (left && !center && !right) {
-				ch = TRAP;
-			} else if (!left && !center && right) {
+			if (left ^ right) {
 				ch = TRAP;
 			} else {
 				ch = SAFE;
