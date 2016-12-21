@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public final class Day21Test {
-	private final ImmutableList<String> INSTRUCTIONS = ImmutableList.of(
+	private static final ImmutableList<String> INSTRUCTIONS = ImmutableList.of(
 		"swap position 4 with position 0",
 		"swap letter d with letter b",
 		"reverse positions 0 through 4",
