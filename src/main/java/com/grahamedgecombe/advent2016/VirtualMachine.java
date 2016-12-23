@@ -10,19 +10,59 @@ public final class VirtualMachine {
 		CPY,
 		INC,
 		DEC,
-		JNZ
+		JNZ,
+		TGL
 	}
 
 	private static final class Instruction {
 		private final Opcode opcode;
-		private final boolean immediate;
+		private final boolean immediate1, immediate2;
 		private final int operand1, operand2;
 
-		private Instruction(Opcode opcode, boolean immediate, int operand1, int operand2) {
+		private Instruction(Opcode opcode, boolean immediate1, boolean immediate2, int operand1, int operand2) {
 			this.opcode = opcode;
-			this.immediate = immediate;
+			this.immediate1 = immediate1;
+			this.immediate2 = immediate2;
 			this.operand1 = operand1;
 			this.operand2 = operand2;
+		}
+
+		private Instruction toggle() {
+			switch (opcode) {
+				case INC:
+					return new Instruction(Opcode.DEC, immediate1, immediate2, operand1, operand2);
+				case DEC:
+				case TGL:
+					return new Instruction(Opcode.INC, immediate1, immediate2, operand1, operand2);
+				case JNZ:
+					return new Instruction(Opcode.CPY, immediate1, immediate2, operand1, operand2);
+				case CPY:
+					return new Instruction(Opcode.JNZ, immediate1, immediate2, operand1, operand2);
+				default:
+					throw new IllegalStateException();
+			}
+		}
+
+		@Override
+		public String toString() {
+			StringBuilder buf = new StringBuilder(opcode.toString());
+			buf.append(" ");
+
+			if (immediate1) {
+				buf.append(operand1);
+			} else {
+				buf.append((char) ('a' + operand1));
+			}
+
+			buf.append(" ");
+
+			if (immediate2) {
+				buf.append(operand2);
+			} else {
+				buf.append((char) ('a' + operand2));
+			}
+
+			return buf.toString();
 		}
 	}
 
@@ -32,7 +72,7 @@ public final class VirtualMachine {
 		for (int i = 0; i < instructions.length; i++) {
 			String[] parts = lines.get(i).split(" ");
 
-			boolean immediate = false;
+			boolean immediate1 = false, immediate2 = false;
 			int operand1, operand2 = 0;
 
 			Opcode opcode = Opcode.valueOf(parts[0].toUpperCase());
@@ -43,7 +83,7 @@ public final class VirtualMachine {
 
 					try {
 						operand1 = Integer.parseInt(x);
-						immediate = true;
+						immediate1 = true;
 					} catch (NumberFormatException ex) {
 						operand1 = x.charAt(0) - 'a';
 					}
@@ -62,18 +102,28 @@ public final class VirtualMachine {
 
 					try {
 						operand1 = Integer.parseInt(x);
-						immediate = true;
+						immediate1 = true;
 					} catch (NumberFormatException ex) {
 						operand1 = x.charAt(0) - 'a';
 					}
 
-					operand2 = Integer.parseInt(y);
+					try {
+						operand2 = Integer.parseInt(y);
+						immediate2 = true;
+					} catch (NumberFormatException ex) {
+						operand2 = y.charAt(0) - 'a';
+					}
+					break;
+				case TGL:
+					x = parts[1];
+
+					operand1 = x.charAt(0) - 'a';
 					break;
 				default:
 					throw new IllegalArgumentException();
 			}
 
-			instructions[i] = new Instruction(opcode, immediate, operand1, operand2);
+			instructions[i] = new Instruction(opcode, immediate1, immediate2, operand1, operand2);
 		}
 
 		return new VirtualMachine(instructions);
@@ -103,17 +153,29 @@ public final class VirtualMachine {
 			Instruction instruction = instructions[pc];
 			switch (instruction.opcode) {
 				case CPY:
-					registers[instruction.operand2] = instruction.immediate ? instruction.operand1 : registers[instruction.operand1];
+					if (!instruction.immediate2) {
+						registers[instruction.operand2] = instruction.immediate1 ? instruction.operand1 : registers[instruction.operand1];
+					}
 					break;
 				case INC:
-					registers[instruction.operand1]++;
+					if (!instruction.immediate1) {
+						registers[instruction.operand1]++;
+					}
 					break;
 				case DEC:
-					registers[instruction.operand1]--;
+					if (!instruction.immediate1) {
+						registers[instruction.operand1]--;
+					}
 					break;
 				case JNZ:
-					if ((instruction.immediate ? instruction.operand1 : registers[instruction.operand1]) != 0) {
-						pc += instruction.operand2 - 1;
+					if ((instruction.immediate1 ? instruction.operand1 : registers[instruction.operand1]) != 0) {
+						pc += (instruction.immediate2 ? instruction.operand2 : registers[instruction.operand2]) - 1;
+					}
+					break;
+				case TGL:
+					int targetPc = pc + (instruction.immediate1 ? instruction.operand1 : registers[instruction.operand1]);
+					if (targetPc >= 0 && targetPc < instructions.length) {
+						instructions[targetPc] = instructions[targetPc].toggle();
 					}
 					break;
 			}
