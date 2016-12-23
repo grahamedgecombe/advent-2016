@@ -151,6 +151,46 @@ public final class VirtualMachine {
 	public void run() {
 		for (int pc = 0; pc < instructions.length; pc++) {
 			Instruction instruction = instructions[pc];
+
+			if ((pc + 5) < instructions.length) {
+				Instruction i1 = instructions[pc + 1];
+				Instruction i2 = instructions[pc + 2];
+				Instruction i3 = instructions[pc + 3];
+				Instruction i4 = instructions[pc + 4];
+				Instruction i5 = instructions[pc + 5];
+
+				int a = i1.operand1;
+				int b = instruction.operand1;
+				int c = instruction.operand2;
+				int d = i4.operand1;
+
+				/* CPY b c; INC a; DEC c; JNZ c -2; DEC d; JNZ d -5 => a += b * d; c = 0; d = 0 */
+				if (instruction.opcode == Opcode.CPY &&
+						i1.opcode == Opcode.INC &&
+						i2.opcode == Opcode.DEC &&
+						i3.opcode == Opcode.JNZ &&
+						i4.opcode == Opcode.DEC &&
+						i5.opcode == Opcode.JNZ &&
+						!instruction.immediate1 && !instruction.immediate2 &&
+						!i1.immediate1 &&
+						!i2.immediate1 &&
+						!i3.immediate1 && i3.immediate2 &&
+						!i4.immediate1 &&
+						!i5.immediate1 && i5.immediate2 &&
+						a != b &&
+						b != c &&
+						c != d &&
+						i2.operand1 == c &&
+						i3.operand1 == c &&
+						i5.operand1 == d) {
+					registers[a] += registers[b] * registers[d];
+					registers[c] = 0;
+					registers[d] = 0;
+					pc += 5;
+					continue;
+				}
+			}
+
 			switch (instruction.opcode) {
 				case CPY:
 					if (!instruction.immediate2) {
